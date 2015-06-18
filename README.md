@@ -5,6 +5,8 @@ strips it of HTML and bureaucratic boilerplate with regex, saving a json array t
 
 Extracts time and location with regex.
 
+[Map demo here!](http://vps.rsopher.com/crime.html)
+
 ## TODO
 Since the structure of these alerts is so repetitive, it should be easy to extract structured data from them.
 Might require some level of NLP and isn't strictly necessary, I suppose.
