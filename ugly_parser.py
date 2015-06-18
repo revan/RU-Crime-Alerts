@@ -1,7 +1,8 @@
-from secrets import ALCHEMY_KEY
+# from secrets import ALCHEMY_KEY
 import requests
 import json
 import re
+import dateutil.parser as dateparser
 from bs4 import BeautifulSoup
 
 
@@ -14,6 +15,8 @@ regexes = ['The Rutgers University Police Department asks .+?\.',
  'The Rutgers University Police Department reminds .+?\.',
  'Follow the Rutgers Police Department .+?department/?\.?'
  ]
+
+date_regex = '(?:January|February|March|April|May|June|July|August|September|October|November|December)\s[1-3]?\d,\s\d{4}'
 
 def getNextStory():
 
@@ -34,10 +37,14 @@ def getNextStory():
 
 		yield target
 
+def extractDate(text):
+	matches = re.findall(date_regex, text)
+	if len(matches) > 0:
+		return (int(dateparser.parse(matches[0]).timestamp()), matches[0])
 
-def runEntityExtraction(story):
-	response = requests.post('http://access.alchemyapi.com/calls/text/TextGetRankedNamedEntities',
-		headers={'Content-Type': 'application/x-www-form-urlencoded'},
-		params={'text': story, 'apikey': ALCHEMY_KEY, 'outputMode': 'json'})
-	print(json.dumps(response.json(), indent=2))
-	return response.json()
+# def runEntityExtraction(story):
+# 	response = requests.post('http://access.alchemyapi.com/calls/text/TextGetRankedNamedEntities',
+# 		headers={'Content-Type': 'application/x-www-form-urlencoded'},
+# 		params={'text': story, 'apikey': ALCHEMY_KEY, 'outputMode': 'json'})
+# 	print(json.dumps(response.json(), indent=2))
+# 	return response.json()
