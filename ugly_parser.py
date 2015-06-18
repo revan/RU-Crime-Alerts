@@ -28,14 +28,14 @@ def getNextStory():
 	itersplits = iter(splits)
 	next(itersplits) #skip first
 	for split in itersplits:
-		target = split.replace('\r', '').replace('\n', '').replace('\t', '')
+		target = split.replace('\r', '').replace('\n', '').replace('\t', '').replace('\u00a0', ' ')
 
 		for reg in regexes:
 			target = re.sub(reg, '', target)
 
 		target = target.split('Authority:')[0]
 
-		yield target
+		yield target.strip()
 
 def extractDate(text):
 	matches = re.findall(date_regex, text)
