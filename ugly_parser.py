@@ -1,4 +1,3 @@
-# from secrets import ALCHEMY_KEY
 import requests
 import json
 import re
@@ -9,17 +8,20 @@ from bs4 import BeautifulSoup
 regexes = ['The Rutgers University Police Department asks .+?\.',
  'The Rutgers University Police Department is actively .+?\.',
  'The New Brunswick Police Department is actively .+?\.',
+ 'The New Brunswick Police Department asks that anyone .+?\.',
+ 'The investigation is ongoing and the New Brunswick Police Department asks .+?\.',
  'Anyone with information or who may have been .+?\.',
  'For more crime prevention information .+?html(/)?(\.)?',
  'For more crime prevention information .+?edu(/)?(\.)?',
  'The Rutgers University Police Department reminds .+?\.',
  'Follow the Rutgers Police Department .+?department/?\.?'
- ]
+]
+
 
 date_regex = '(?:January|February|March|April|May|June|July|August|September|October|November|December)\s[1-3]?\d,\s\d{4}'
+location_regex = '\w+\s(?:Street|Avenue|Place|Drive)'
 
 def getNextStory():
-
 	soup = BeautifulSoup(requests.get('http://rupd.rutgers.edu/crime.php').text)
 
 	clean = soup.get_text()
@@ -42,9 +44,5 @@ def extractDate(text):
 	if len(matches) > 0:
 		return (int(dateparser.parse(matches[0]).timestamp()), matches[0])
 
-# def runEntityExtraction(story):
-# 	response = requests.post('http://access.alchemyapi.com/calls/text/TextGetRankedNamedEntities',
-# 		headers={'Content-Type': 'application/x-www-form-urlencoded'},
-# 		params={'text': story, 'apikey': ALCHEMY_KEY, 'outputMode': 'json'})
-# 	print(json.dumps(response.json(), indent=2))
-# 	return response.json()
+def extractLocation(text):
+	return re.findall(location_regex, text)
