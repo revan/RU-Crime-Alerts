@@ -19,7 +19,7 @@ regexes = ['The Rutgers University Police Department asks .+?\.',
 
 
 date_regex = '(?:January|February|March|April|May|June|July|August|September|October|November|December)\s[1-3]?\d,\s\d{4}'
-location_regex = '\w+\s(?:Street|Avenue|Place|Drive)'
+location_regex = '\w+\s(?:Street|Avenue|Place|Drive|St\.)'
 
 def getNextStory():
 	soup = BeautifulSoup(requests.get('http://rupd.rutgers.edu/crime.php').text)

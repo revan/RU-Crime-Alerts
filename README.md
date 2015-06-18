@@ -11,6 +11,8 @@ Might require some level of NLP and isn't strictly necessary, I suppose.
 
 Notably: crime, perpetrator description.
 
+Location extraction doesn't currently catch cases like `Mason and Pine Streets` or `on Robinson Street between Hamilton Street and Central Avenue`, reporting just `Pine Street` or `Robinson Street, Hamilton Street` respectively.
+
 Also needs to load the local database and merge with new requests instead of clobbering in case RUPD takes down old alerts.
 
 ### Python Requirements:
