@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Info windows</title>
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script>
+
+function initialize() {
+$.getJSON("http://vps.rsopher.com/crime.json", function(data) {
+
+    data.forEach(function(entry) {
+      if (entry.location1 != null) {
+        var address = entry.location1;
+        if (entry.location2 != null) {
+          address += " and " + entry.location2;
+        }
+        address += ", New Brunswick, NJ";
+
+
+        $.getJSON('http://maps.googleapis.com/maps/api/geocode/json?address='+address+'&sensor=false', null, function (data) {
+            var p = data.results[0].geometry.location
+            var latlng = new google.maps.LatLng(p.lat, p.lng);
+            new google.maps.Marker({
+                position: latlng,
+                map: map
+            });
+
+
+            var marker = new google.maps.Marker({
+              position: latlng,
+              map: map,
+              title: entry.date_human
+            });
+
+            var infowindow = new google.maps.InfoWindow({
+                content: entry.text
+            });
+            google.maps.event.addListener(marker, 'click', function() {
+              infowindow.open(map,marker);
+            });
+
+        });
+      }
+    });
+});
+
+
+  var myLatlng = new google.maps.LatLng(40.5017564,-74.4477772);
+  var mapOptions = {
+    zoom: 15,
+    center: myLatlng
+  };
+
+  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+    <div id="map-canvas"></div>
+  </body>
+</html>
